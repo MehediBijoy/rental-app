@@ -83,7 +83,7 @@ const ReturnModal = ({isOpened, onClose}) => {
               ))}
             </Select>
           </Form.Item>
-          {selected && <List product={selectedProduct} />}
+          {selected && selectedProduct && <List product={selectedProduct} />}
           <Form.Item label='Status'>
             <Input value='Used Mileage' disabled />
           </Form.Item>

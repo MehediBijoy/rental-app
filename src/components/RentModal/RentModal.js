@@ -106,7 +106,7 @@ const RentModal = ({isOpened, onClose}) => {
               ))}
             </Select>
           </Form.Item>
-          {selected && <List product={selectedProduct} />}
+          {selected && selectedProduct && <List product={selectedProduct} />}
           <Form.Item
             label='From'
             name='from'
