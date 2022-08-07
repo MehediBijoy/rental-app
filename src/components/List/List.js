@@ -13,7 +13,7 @@ const List = ({product}) => {
       renderItem={(item) => (
         <AntList.Item>
           <strong>{item[0]}</strong>:{' '}
-          {item[1] ? capitalize(item[1].toString()) : '-'}
+          {item[1] !== null ? capitalize(item[1].toString()) : '-'}
         </AntList.Item>
       )}
     />
