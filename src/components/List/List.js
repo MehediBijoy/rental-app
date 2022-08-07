@@ -2,6 +2,7 @@ import {List as AntList} from 'antd'
 import {capitalize} from 'utils'
 
 const List = ({product}) => {
+  console.log(product)
   return (
     <AntList
       style={{
