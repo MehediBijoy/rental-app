@@ -2,7 +2,6 @@ import {List as AntList} from 'antd'
 import {capitalize} from 'utils'
 
 const List = ({product}) => {
-  console.log(product)
   return (
     <AntList
       style={{
@@ -13,7 +12,8 @@ const List = ({product}) => {
       dataSource={Object.entries(product)}
       renderItem={(item) => (
         <AntList.Item>
-          <strong>{item[0]}</strong>: {capitalize(item[1].toString())}
+          <strong>{item[0]}</strong>:{' '}
+          {item[1] ? capitalize(item[1].toString()) : '-'}
         </AntList.Item>
       )}
     />
