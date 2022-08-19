@@ -1,3 +1,14 @@
+import {CheckCircleFilled, CloseCircleFilled} from '@ant-design/icons'
+
+const ToggleIcons = ({value}) => {
+  const style = {
+    fontSize: 20,
+    color: 'green',
+  }
+  if (value) return <CheckCircleFilled style={style} />
+  return <CloseCircleFilled style={{...style, color: 'red'}} />
+}
+
 export const columns = [
   {
     title: 'I',
@@ -7,32 +18,37 @@ export const columns = [
   {
     title: 'Name',
     dataIndex: 'name',
-    sorter: (a, b) => a.code - b.code,
   },
   {
     title: 'Code',
     dataIndex: 'code',
-    sorter: (a, b) => a.code - b.code,
+    align: 'center',
   },
   {
     title: 'Availability',
     dataIndex: 'availability',
-    sorter: (a, b) => a.availability - b.availability,
+    align: 'center',
+    render: (value) => {
+      return <ToggleIcons value={value} />
+    },
   },
   {
     title: 'Need To Repair',
     dataIndex: 'needing_repair',
-    sorter: (a, b) => a.needing_repair - b.needing_repair,
+    align: 'center',
+    render: (value) => {
+      return <ToggleIcons value={value} />
+    },
   },
   {
     title: 'Durability',
     dataIndex: 'durability',
-    sorter: (a, b) => a.durability - b.durability,
   },
   {
     title: 'Mileage',
     dataIndex: 'mileage',
     sorter: (a, b) => a.mileage - b.mileage,
+    align: 'center',
     render: (item) => {
       return item ?? '-'
     },
@@ -43,7 +59,7 @@ export const columns = [
     sorter: (a, b) => a.price - b.price,
     render: (price) => {
       return `$${price}`
-    }
+    },
   },
   {
     title: 'Minimun rent period',
@@ -51,6 +67,8 @@ export const columns = [
     sorter: (a, b) => a.minimum_rent_period - b.minimum_rent_period,
     render: (days) => {
       return `${days} days`
-    }
+    },
   },
 ]
+
+export const searchFields = ['name', 'code', 'price']

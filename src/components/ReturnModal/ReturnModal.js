@@ -6,6 +6,7 @@ import Modal from 'components/Modal'
 import Alert from 'components/Alert'
 import List from 'components/List'
 import {removeBooked} from 'redux/slices/bookProducts'
+import {updateReturnProduct} from 'redux/slices/products'
 
 const ReturnModal = ({isOpened, onClose}) => {
   const dispatch = useDispatch()
@@ -14,32 +15,41 @@ const ReturnModal = ({isOpened, onClose}) => {
   const bookedProducts = useSelector((state) => state.bookProducts)
 
   const [form] = Form.useForm()
-  const selected = Form.useWatch('booked_id', form)
+  const selected = Form.useWatch('code', form)
 
   const data = useMemo(
     () =>
       bookedProducts.map((item) => ({
-        ...products.find((ii) => ii.code === item.product),
-        id: item.id,
+        ...products.find((ii) => ii.code === item.code),
       })),
     [products, bookedProducts]
   )
 
-  const selectedProduct = useMemo(
-    () => bookedProducts.find((item) => item.id === selected),
-    [selected, bookedProducts]
-  )
+  const selectedProduct = useMemo(() => {
+    const product = bookedProducts.find((item) => item.code === selected)
+    const productObject = data.find((item) => item.code === product?.code)
+    return {
+      name: productObject?.name,
+      ...product,
+    }
+  }, [selected, bookedProducts])
 
   const onOkHandler = useCallback(() => {
     setPopConfirm(true)
   }, [])
 
   const onConfirmed = useCallback(() => {
-    dispatch(removeBooked({id: selected}))
+    dispatch(removeBooked({code: selected}))
+    dispatch(updateReturnProduct(form.getFieldsValue()))
     form.resetFields()
     setPopConfirm(false)
     onClose(false)
   }, [dispatch, form, setPopConfirm, onClose, selected])
+
+  const onCloseHandler = useCallback(() => {
+    onClose(false)
+    form.resetFields()
+  }, [form, onClose])
 
   return (
     <>
@@ -48,25 +58,23 @@ const ReturnModal = ({isOpened, onClose}) => {
         okText='Yes'
         cancelText='No'
         isOpened={isOpened}
-        onClose={() => onClose(false)}
+        onClose={onCloseHandler}
         onOk={() =>
           form
             .validateFields()
             .then((value) => onOkHandler(value))
             .catch(console.log)
-        }
-      >
+        }>
         <Form labelCol={{span: 4}} wrapperCol={{span: 20}} form={form}>
           <Form.Item
-            name='booked_id'
+            name='code'
             label='Product'
             rules={[
               {
                 required: true,
                 message: 'Please select a product',
               },
-            ]}
-          >
+            ]}>
             <Select
               style={{width: '100%'}}
               showSearch
@@ -74,18 +82,37 @@ const ReturnModal = ({isOpened, onClose}) => {
               optionFilterProp='children'
               filterOption={(input, option) =>
                 option.children.toLowerCase().includes(input.toLowerCase())
-              }
-            >
+              }>
               {data.map((item, index) => (
-                <Select.Option value={item.id} key={index}>
+                <Select.Option value={item.code} key={index}>
                   {item.name}
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
-          {selected && selectedProduct && <List product={selectedProduct} />}
-          <Form.Item label='Status'>
-            <Input value='Used Mileage' disabled />
+          {selected && selectedProduct && (
+            <Form.Item label='Details'>
+              <List product={selectedProduct} />
+            </Form.Item>
+          )}
+          <Form.Item
+            label='Mileage'
+            name='mileage'
+            rules={[
+              {
+                required: true,
+                message: 'Please enter used mileage',
+              },
+              {
+                validator(_, value) {
+                  if (value < 0) {
+                    return Promise.reject('Enter positive number')
+                  }
+                  return Promise.resolve()
+                },
+              },
+            ]}>
+            <Input placeholder='Used Mileage' type='number' />
           </Form.Item>
         </Form>
       </Modal>
@@ -93,8 +120,7 @@ const ReturnModal = ({isOpened, onClose}) => {
         title='Return a Product'
         isOpened={popConfirm}
         onClose={setPopConfirm}
-        onConfirmed={onConfirmed}
-      >
+        onConfirmed={onConfirmed}>
         <Row justify='center'>
           <Col span={24} style={{textAlign: 'center'}}>
             Your total price is: ${selectedProduct?.price}

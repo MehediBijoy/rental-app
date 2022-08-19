@@ -1,20 +1,21 @@
-import {useMemo, useState} from 'react'
+import {useMemo} from 'react'
 import {Table as AntTable} from 'antd'
+import {useSelector} from 'react-redux'
 
 import TableHeader from './TableHeader'
 
-const Table = ({title, columns, data, withSearch, ...rest}) => {
-  const [search, setSearch] = useState()
+const Table = ({title, columns, data, withSearch, searchFields, ...rest}) => {
+  const search = useSelector((state) => state.productSearch)
   const dataSource = useMemo(() => {
     if (!search) return data
     return data.filter((item) => {
       return Object.entries(item)
-        .map((item) => item[1])
+        .map((item) => searchFields.includes(item[0]) && item[1])
         .join(' ')
         .toLowerCase()
         .includes(search.toLowerCase())
     })
-  }, [search, data])
+  }, [search, data, searchFields])
 
   return (
     <AntTable
@@ -25,7 +26,7 @@ const Table = ({title, columns, data, withSearch, ...rest}) => {
         <TableHeader
           title={title}
           withSearch={withSearch}
-          searchChange={setSearch}
+          searchValue={search}
         />
       )}
       {...rest}

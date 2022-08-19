@@ -5,20 +5,16 @@ const BookProducts = createSlice({
   initialState: [],
   reducers: {
     bookProduct: (state, {payload}) => {
-      state.push({
-        id: state.length + 1,
-        product: payload.product,
-        price: payload.price,
-      })
+      state.push(payload)
     },
     removeBooked: (state, {payload}) => {
       state.splice(
-        state.findIndex((item) => item.id === payload.id),
+        state.findIndex((item) => item.code === payload.code),
         1
       )
     },
   },
 })
 
-export const {bookProduct, removeBooked} = BookProducts.actions
 export default BookProducts
+export const {bookProduct, removeBooked} = BookProducts.actions

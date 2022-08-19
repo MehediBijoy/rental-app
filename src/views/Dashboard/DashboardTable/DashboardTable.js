@@ -1,10 +1,9 @@
 import {useMemo} from 'react'
 import {useSelector} from 'react-redux'
 
-import {capitalize} from 'utils'
 import Table from 'components/Table'
 
-import {columns} from './DashboardTable.config'
+import {columns, searchFields} from './DashboardTable.config'
 
 const DashboardTable = () => {
   const products = useSelector((state) => state.products)
@@ -13,8 +12,6 @@ const DashboardTable = () => {
       products.map((item, index) => ({
         ...item,
         key: index + 1,
-        availability: capitalize(item.availability.toString()),
-        needing_repair: capitalize(item.needing_repair.toString()),
         durability: `${item.durability}/${item.max_durability}`,
       })),
     [products]
@@ -24,10 +21,10 @@ const DashboardTable = () => {
     <Table
       columns={columns}
       data={data}
+      searchFields={searchFields}
       withSearch
       title='Products'
-      // footer={CustomTableFooter}
-      // pagination={false}
+      scroll={{x: 767}}
     />
   )
 }

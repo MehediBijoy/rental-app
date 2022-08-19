@@ -13,7 +13,7 @@ import {updateProduct} from 'redux/slices/products'
 import {bookProduct} from 'redux/slices/bookProducts'
 
 const schema = yup.object().shape({
-  product: yup.string().required(),
+  code: yup.string().required(),
   from: yup
     .date()
     .typeError('Return Date is required')
@@ -46,7 +46,7 @@ const RentModal = ({isOpened, onClose}) => {
     [products]
   )
 
-  const selected = Form.useWatch('product', form)
+  const selected = Form.useWatch('code', form)
   const selectedProduct = useMemo(
     () => data.find((item) => item.code === selected),
     [data, selected]
@@ -66,12 +66,23 @@ const RentModal = ({isOpened, onClose}) => {
 
   const onConfirmed = useCallback(() => {
     dispatch(updateProduct(form.getFieldsValue()))
-    dispatch(bookProduct({...form.getFieldsValue(), price: estimatePrice}))
+    dispatch(
+      bookProduct({
+        code: form.getFieldValue('code'),
+        name: selectedProduct?.name,
+        price: estimatePrice,
+      })
+    )
     form.resetFields()
     setEstimatePrice()
     setPopConfirm(false)
     onClose(false)
   }, [dispatch, form, estimatePrice, setEstimatePrice, setPopConfirm, onClose])
+
+  const onCloseHandler = useCallback(() => {
+    onClose(false)
+    form.resetFields()
+  }, [form, onClose])
 
   return (
     <>
@@ -80,16 +91,15 @@ const RentModal = ({isOpened, onClose}) => {
         okText='Yes'
         cancelText='No'
         isOpened={isOpened}
-        onClose={() => onClose(false)}
+        onClose={onCloseHandler}
         onOk={async () =>
           form
             .validateFields()
             .then((value) => onOkHandler(value))
             .catch(console.log)
-        }
-      >
+        }>
         <Form labelCol={{span: 4}} wrapperCol={{span: 20}} form={form}>
-          <Form.Item name='product' label='Product' rules={[yupSync]}>
+          <Form.Item name='code' label='Product' rules={[yupSync]}>
             <Select
               style={{width: '100%'}}
               showSearch
@@ -97,8 +107,7 @@ const RentModal = ({isOpened, onClose}) => {
               optionFilterProp='children'
               filterOption={(input, option) =>
                 option.children.toLowerCase().includes(input.toLowerCase())
-              }
-            >
+              }>
               {data.map((item, index) => (
                 <Select.Option value={item.code} key={index}>
                   {item.name}
@@ -106,7 +115,11 @@ const RentModal = ({isOpened, onClose}) => {
               ))}
             </Select>
           </Form.Item>
-          {selected && selectedProduct && <List product={selectedProduct} />}
+          {selected && selectedProduct && (
+            <Form.Item label='Details'>
+              <List product={selectedProduct} />
+            </Form.Item>
+          )}
           <Form.Item
             label='From'
             name='from'
@@ -120,8 +133,7 @@ const RentModal = ({isOpened, onClose}) => {
                   return Promise.resolve()
                 },
               },
-            ]}
-          >
+            ]}>
             <DatePicker
               style={{
                 width: '100%',
@@ -153,8 +165,7 @@ const RentModal = ({isOpened, onClose}) => {
                   return Promise.resolve()
                 },
               },
-            ]}
-          >
+            ]}>
             <DatePicker
               style={{
                 width: '100%',
@@ -168,8 +179,7 @@ const RentModal = ({isOpened, onClose}) => {
         title='Book a Product'
         isOpened={popConfirm}
         onClose={setPopConfirm}
-        onConfirmed={onConfirmed}
-      >
+        onConfirmed={onConfirmed}>
         <Row justify='center'>
           <Col span={24} style={{textAlign: 'center'}}>
             Your estimate price is: ${estimatePrice}

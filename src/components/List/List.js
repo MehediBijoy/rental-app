@@ -4,15 +4,12 @@ import {capitalize} from 'utils'
 const List = ({product}) => {
   return (
     <AntList
-      style={{
-        marginBottom: '5px',
-      }}
       size='small'
       bordered
       dataSource={Object.entries(product)}
       renderItem={(item) => (
         <AntList.Item>
-          <strong>{item[0]}</strong>:{' '}
+          <strong>{capitalize(item[0].split('_').join(' '))}</strong>:{' '}
           {item[1] !== null ? capitalize(item[1].toString()) : '-'}
         </AntList.Item>
       )}

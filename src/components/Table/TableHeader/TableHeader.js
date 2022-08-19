@@ -1,6 +1,10 @@
 import {PageHeader, Input} from 'antd'
+import {useDispatch} from 'react-redux'
 
-const TableHeader = ({title, withSearch, searchChange}) => {
+import {productSearchMethod} from 'redux/slices/productSearch'
+
+const TableHeader = ({title, withSearch, searchValue}) => {
+  const dispatch = useDispatch()
   return (
     <PageHeader
       title={title}
@@ -9,8 +13,9 @@ const TableHeader = ({title, withSearch, searchChange}) => {
           <Input
             key='1'
             title='Search'
+            value={searchValue}
             placeholder='search'
-            onChange={({target}) => searchChange(target.value)}
+            onChange={({target}) => dispatch(productSearchMethod(target.value))}
           />
         ),
       ]}

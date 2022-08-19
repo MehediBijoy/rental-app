@@ -4,6 +4,7 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit'
 
 import products from './slices/products'
 import BookProducts from './slices/bookProducts'
+import productSearch from './slices/productSearch'
 
 const persistConfig = {
   key: 'root',
@@ -13,6 +14,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   products: products.reducer,
   bookProducts: BookProducts.reducer,
+  productSearch: productSearch.reducer,
 })
 
 export default function createStore() {
