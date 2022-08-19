@@ -77,7 +77,15 @@ const RentModal = ({isOpened, onClose}) => {
     setEstimatePrice()
     setPopConfirm(false)
     onClose(false)
-  }, [dispatch, form, estimatePrice, setEstimatePrice, setPopConfirm, onClose])
+  }, [
+    dispatch,
+    form,
+    estimatePrice,
+    setEstimatePrice,
+    setPopConfirm,
+    onClose,
+    selectedProduct,
+  ])
 
   const onCloseHandler = useCallback(() => {
     onClose(false)

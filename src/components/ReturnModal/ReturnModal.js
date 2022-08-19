@@ -32,7 +32,7 @@ const ReturnModal = ({isOpened, onClose}) => {
       name: productObject?.name,
       ...product,
     }
-  }, [selected, bookedProducts])
+  }, [selected, bookedProducts, data])
 
   const onOkHandler = useCallback(() => {
     setPopConfirm(true)
