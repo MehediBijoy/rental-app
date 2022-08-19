@@ -7,7 +7,6 @@ import {DatePicker, Select, Row, Col, Form} from 'antd'
 import Modal from 'components/Modal'
 import Alert from 'components/Alert'
 import List from 'components/List'
-
 import {getDaysDiff} from 'utils'
 import {updateProduct} from 'redux/slices/products'
 import {bookProduct} from 'redux/slices/bookProducts'
@@ -37,23 +36,20 @@ const RentModal = ({isOpened, onClose}) => {
   const dispatch = useDispatch()
   const [popConfirm, setPopConfirm] = useState(false)
   const [estimatePrice, setEstimatePrice] = useState()
-  const products = useSelector((state) => state.products)
+  const products = useSelector(state => state.products)
   const [form] = Form.useForm()
   const {getFieldValue} = form
 
   const data = useMemo(
-    () => products.filter((item) => item.availability && !item.needing_repair),
+    () => products.filter(item => item.availability && !item.needing_repair),
     [products]
   )
 
   const selected = Form.useWatch('code', form)
-  const selectedProduct = useMemo(
-    () => data.find((item) => item.code === selected),
-    [data, selected]
-  )
+  const selectedProduct = useMemo(() => data.find(item => item.code === selected), [data, selected])
 
   const onOkHandler = useCallback(
-    async (values) => {
+    async values => {
       const fromDate = moment(values?.from)
       const toDate = moment(values?.to)
       const totalDays = getDaysDiff(fromDate, toDate)
@@ -77,15 +73,7 @@ const RentModal = ({isOpened, onClose}) => {
     setEstimatePrice()
     setPopConfirm(false)
     onClose(false)
-  }, [
-    dispatch,
-    form,
-    estimatePrice,
-    setEstimatePrice,
-    setPopConfirm,
-    onClose,
-    selectedProduct,
-  ])
+  }, [dispatch, form, estimatePrice, setEstimatePrice, setPopConfirm, onClose, selectedProduct])
 
   const onCloseHandler = useCallback(() => {
     onClose(false)
@@ -103,9 +91,10 @@ const RentModal = ({isOpened, onClose}) => {
         onOk={async () =>
           form
             .validateFields()
-            .then((value) => onOkHandler(value))
+            .then(value => onOkHandler(value))
             .catch(console.log)
-        }>
+        }
+      >
         <Form labelCol={{span: 4}} wrapperCol={{span: 20}} form={form}>
           <Form.Item name='code' label='Product' rules={[yupSync]}>
             <Select
@@ -115,9 +104,10 @@ const RentModal = ({isOpened, onClose}) => {
               optionFilterProp='children'
               filterOption={(input, option) =>
                 option.children.toLowerCase().includes(input.toLowerCase())
-              }>
-              {data.map((item, index) => (
-                <Select.Option value={item.code} key={index}>
+              }
+            >
+              {data.map(item => (
+                <Select.Option value={item?.code} key={item?.code}>
                   {item.name}
                 </Select.Option>
               ))}
@@ -141,7 +131,8 @@ const RentModal = ({isOpened, onClose}) => {
                   return Promise.resolve()
                 },
               },
-            ]}>
+            ]}
+          >
             <DatePicker
               style={{
                 width: '100%',
@@ -163,8 +154,7 @@ const RentModal = ({isOpened, onClose}) => {
                     return Promise.reject('Select Pick Date')
                   }
                   if (
-                    getDaysDiff(getFieldValue('from'), value) <
-                    selectedProduct?.minimum_rent_period
+                    getDaysDiff(getFieldValue('from'), value) < selectedProduct?.minimum_rent_period
                   ) {
                     return Promise.reject(
                       'Rental period must be greater then minimum rental period'
@@ -173,7 +163,8 @@ const RentModal = ({isOpened, onClose}) => {
                   return Promise.resolve()
                 },
               },
-            ]}>
+            ]}
+          >
             <DatePicker
               style={{
                 width: '100%',
@@ -187,7 +178,8 @@ const RentModal = ({isOpened, onClose}) => {
         title='Book a Product'
         isOpened={popConfirm}
         onClose={setPopConfirm}
-        onConfirmed={onConfirmed}>
+        onConfirmed={onConfirmed}
+      >
         <Row justify='center'>
           <Col span={24} style={{textAlign: 'center'}}>
             Your estimate price is: ${estimatePrice}

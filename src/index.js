@@ -1,11 +1,10 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-
 import {Provider} from 'react-redux'
+import ReactDOM from 'react-dom/client'
 import {PersistGate} from 'redux-persist/integration/react'
 
 import App from 'containers/App'
 import createStore from 'redux/createStore'
+
 import reportWebVitals from './reportWebVitals'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))

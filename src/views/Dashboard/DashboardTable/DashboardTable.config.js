@@ -28,7 +28,7 @@ export const columns = [
     title: 'Availability',
     dataIndex: 'availability',
     align: 'center',
-    render: (value) => {
+    render: value => {
       return <ToggleIcons value={value} />
     },
   },
@@ -36,7 +36,7 @@ export const columns = [
     title: 'Need To Repair',
     dataIndex: 'needing_repair',
     align: 'center',
-    render: (value) => {
+    render: value => {
       return <ToggleIcons value={value} />
     },
   },
@@ -49,7 +49,7 @@ export const columns = [
     dataIndex: 'mileage',
     sorter: (a, b) => a.mileage - b.mileage,
     align: 'center',
-    render: (item) => {
+    render: item => {
       return item ?? '-'
     },
   },
@@ -57,7 +57,7 @@ export const columns = [
     title: 'Price',
     dataIndex: 'price',
     sorter: (a, b) => a.price - b.price,
-    render: (price) => {
+    render: price => {
       return `$${price}`
     },
   },
@@ -65,7 +65,7 @@ export const columns = [
     title: 'Minimun rent period',
     dataIndex: 'minimum_rent_period',
     sorter: (a, b) => a.minimum_rent_period - b.minimum_rent_period,
-    render: (days) => {
+    render: days => {
       return `${days} days`
     },
   },

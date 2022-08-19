@@ -2,9 +2,13 @@ import {createSlice} from '@reduxjs/toolkit'
 
 const productSearch = createSlice({
   name: 'productSearch',
-  initialState: '',
+  initialState: {
+    search: '',
+  },
   reducers: {
-    productSearchMethod: (state, {payload}) => (state = payload),
+    productSearchMethod: (state, {payload}) => {
+      state.search = payload
+    },
   },
 })
 

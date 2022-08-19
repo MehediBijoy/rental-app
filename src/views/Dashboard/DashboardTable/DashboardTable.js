@@ -6,7 +6,7 @@ import Table from 'components/Table'
 import {columns, searchFields} from './DashboardTable.config'
 
 const DashboardTable = () => {
-  const products = useSelector((state) => state.products)
+  const products = useSelector(state => state.products)
   const data = useMemo(
     () =>
       products.map((item, index) => ({

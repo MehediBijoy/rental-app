@@ -11,23 +11,23 @@ import {updateReturnProduct} from 'redux/slices/products'
 const ReturnModal = ({isOpened, onClose}) => {
   const dispatch = useDispatch()
   const [popConfirm, setPopConfirm] = useState(false)
-  const products = useSelector((state) => state.products)
-  const bookedProducts = useSelector((state) => state.bookProducts)
+  const products = useSelector(state => state.products)
+  const bookedProducts = useSelector(state => state.bookProducts)
 
   const [form] = Form.useForm()
   const selected = Form.useWatch('code', form)
 
   const data = useMemo(
     () =>
-      bookedProducts.map((item) => ({
-        ...products.find((ii) => ii.code === item.code),
+      bookedProducts.map(item => ({
+        ...products.find(ii => ii.code === item.code),
       })),
     [products, bookedProducts]
   )
 
   const selectedProduct = useMemo(() => {
-    const product = bookedProducts.find((item) => item.code === selected)
-    const productObject = data.find((item) => item.code === product?.code)
+    const product = bookedProducts.find(item => item.code === selected)
+    const productObject = data.find(item => item.code === product?.code)
     return {
       name: productObject?.name,
       ...product,
@@ -62,9 +62,10 @@ const ReturnModal = ({isOpened, onClose}) => {
         onOk={() =>
           form
             .validateFields()
-            .then((value) => onOkHandler(value))
+            .then(value => onOkHandler(value))
             .catch(console.log)
-        }>
+        }
+      >
         <Form labelCol={{span: 4}} wrapperCol={{span: 20}} form={form}>
           <Form.Item
             name='code'
@@ -74,7 +75,8 @@ const ReturnModal = ({isOpened, onClose}) => {
                 required: true,
                 message: 'Please select a product',
               },
-            ]}>
+            ]}
+          >
             <Select
               style={{width: '100%'}}
               showSearch
@@ -82,9 +84,10 @@ const ReturnModal = ({isOpened, onClose}) => {
               optionFilterProp='children'
               filterOption={(input, option) =>
                 option.children.toLowerCase().includes(input.toLowerCase())
-              }>
-              {data.map((item, index) => (
-                <Select.Option value={item.code} key={index}>
+              }
+            >
+              {data.map(item => (
+                <Select.Option value={item?.code} key={item?.code}>
                   {item.name}
                 </Select.Option>
               ))}
@@ -111,7 +114,8 @@ const ReturnModal = ({isOpened, onClose}) => {
                   return Promise.resolve()
                 },
               },
-            ]}>
+            ]}
+          >
             <Input placeholder='Used Mileage' type='number' />
           </Form.Item>
         </Form>
@@ -120,7 +124,8 @@ const ReturnModal = ({isOpened, onClose}) => {
         title='Return a Product'
         isOpened={popConfirm}
         onClose={setPopConfirm}
-        onConfirmed={onConfirmed}>
+        onConfirmed={onConfirmed}
+      >
         <Row justify='center'>
           <Col span={24} style={{textAlign: 'center'}}>
             Your total price is: ${selectedProduct?.price}

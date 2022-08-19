@@ -5,12 +5,12 @@ import {useSelector} from 'react-redux'
 import TableHeader from './TableHeader'
 
 const Table = ({title, columns, data, withSearch, searchFields, ...rest}) => {
-  const search = useSelector((state) => state.productSearch)
+  const search = useSelector(state => state.productSearch.search)
   const dataSource = useMemo(() => {
     if (!search) return data
-    return data.filter((item) => {
+    return data.filter(item => {
       return Object.entries(item)
-        .map((item) => searchFields.includes(item[0]) && item[1])
+        .map(item => searchFields.includes(item[0]) && item[1])
         .join(' ')
         .toLowerCase()
         .includes(search.toLowerCase())
@@ -22,13 +22,7 @@ const Table = ({title, columns, data, withSearch, searchFields, ...rest}) => {
       columns={columns}
       dataSource={dataSource ?? []}
       bordered
-      title={() => (
-        <TableHeader
-          title={title}
-          withSearch={withSearch}
-          searchValue={search}
-        />
-      )}
+      title={() => <TableHeader title={title} withSearch={withSearch} searchValue={search} />}
       {...rest}
     />
   )

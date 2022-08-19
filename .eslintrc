@@ -1,0 +1,77 @@
+{
+  "extends": [
+    "react-app",
+    "prettier",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
+  "plugins": ["react", "react-hooks", "prettier"],
+  "rules": {
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
+    "import/no-anonymous-default-export": [1, {"allowObject": true, "allowArray": true}],
+    "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
+    "no-unused-vars": "warn",
+    "no-console": [
+      0,
+      {
+        "allow": ["warn", "error"]
+      }
+    ],
+    "import/order": [
+      1,
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
+        "newlines-between": "always"
+      }
+    ],
+    "react/require-default-props": 0,
+    "react/prop-types": [
+      1,
+      {
+        "ignore": ["children"],
+        "skipUndeclared": true
+      }
+    ],
+    "no-nested-ternary": 0,
+    "react/button-has-type": 0,
+    "no-empty": [
+      "error",
+      {
+        "allowEmptyCatch": true
+      }
+    ],
+    "react/forbid-prop-types": [
+      1,
+      {
+        "forbid": ["any", "array"]
+      }
+    ],
+    "react/no-array-index-key": ["warn"],
+    "prettier/prettier": [
+      "warn",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": ["state"]
+      }
+    ]
+  },
+  "settings": {
+    "import/external-module-folders": ["node_modules"],
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx"],
+        "moduleDirectory": ["node_modules", "src/"],
+        "paths": ["./src", "./node_modules"]
+      }
+    }
+  }
+}

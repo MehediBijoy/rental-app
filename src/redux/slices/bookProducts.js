@@ -9,7 +9,7 @@ const BookProducts = createSlice({
     },
     removeBooked: (state, {payload}) => {
       state.splice(
-        state.findIndex((item) => item.code === payload.code),
+        state.findIndex(item => item.code === payload.code),
         1
       )
     },

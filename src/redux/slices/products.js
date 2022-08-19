@@ -1,7 +1,8 @@
-import {createSlice} from '@reduxjs/toolkit'
-import data from 'data/Data.json'
 import moment from 'moment'
+import {createSlice} from '@reduxjs/toolkit'
+
 import {getDaysDiff} from 'utils'
+import data from 'data/Data.json'
 
 const products = createSlice({
   name: 'products',
@@ -9,7 +10,7 @@ const products = createSlice({
   reducers: {
     updateProduct: (state, {payload}) => {
       const days = getDaysDiff(moment(payload.from), moment(payload.to))
-      const product = state.find((item) => item.code === payload.code)
+      const product = state.find(item => item.code === payload.code)
       const durability = product.type === 'plain' ? days * 1 : days * 4
       const needing_repair = product.durability - durability <= 0
       Object.assign(product, {
@@ -22,9 +23,8 @@ const products = createSlice({
     },
 
     updateReturnProduct: (state, {payload}) => {
-      const product = state.find((item) => item.code === payload.code)
-      const durability =
-        product.type === 'meter' ? (parseInt(payload?.mileage) / 10) * 2 : 0
+      const product = state.find(item => item.code === payload.code)
+      const durability = product.type === 'meter' ? (parseInt(payload?.mileage) / 10) * 2 : 0
       const needing_repair = product.durability - durability <= 0
       Object.assign(product, {
         ...product,
